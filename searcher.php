@@ -20,6 +20,8 @@
            	<input id="s" name="query" type="text" />
             
             <input type="submit" value="Submit" name="Submit1" id="submitButton" />
+            <input type="submit" value="Test queries" name="Submit2" id="submitButton" />
+            <input type="submit" value="Baseline" name="Submit3" id="submitButton" />
                                
             <ul class="icons">
                 <li class="web" title="Web Search" data-searchType="web">Web</li>
@@ -37,12 +39,24 @@
 			<?php 
 			
 				include("cori.php");
+				include("testqueries.php");
+				include("baseline.php");
 			
 				if (isset($_POST['Submit1'])) {
 				
 					$query = $_POST['query'];
 					
 					cori($query);	
+				}
+				
+				if (isset($_POST['Submit2'])) {
+				
+					myQueries();
+				}
+				
+				if (isset($_POST['Submit3'])) {
+				
+					baseline();
 				}
 			
 			?>

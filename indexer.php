@@ -15,16 +15,19 @@
 	//set_time_limit(60);
 	
 	 $servername = "localhost";
-	 $username = "user2691071";
-	 $password = "anar0820";
-	 $dbname = "db2691071-main";
+	 $username = "root";
+	 $password = "";
+	 $dbname = "fsearch";
 	
 	// Create connection
 	$conn = new mysqli($servername, $username, $password, $dbname);
+	
+
 	// Check connection
 	if ($conn->connect_error) {
 	    die("Connection failed: " . $conn->connect_error);
 	}	
+		
 
 	$filename = "sample.tgz";
 	//$filename = "http://www.ux.uis.no/~bilegt/sample.tgz";
@@ -84,7 +87,7 @@
 						if (strlen($key) < 3) {
 							unset($value1[$key]);
 						} else {
-							$valArr = split (",", $value);
+							$valArr = explode (",", $value);
 							$sql = "INSERT INTO indexer (collection, words, frequency, documents) VALUES ('".$oldcollectionId."', '".$key."', '".$valArr[0]."', '".$valArr[1]."');";
 														
 							if ($k == 0)
@@ -108,7 +111,7 @@
 					if (isset($sumWord_frequencies[$collectionId][$key])) {
 						
 						$values = $sumWord_frequencies[$collectionId][$key];						
-						$valArr = split (",", $values);
+						$valArr = explode (",", $values);
 												
 						//echo $key." => ".$values." + ".$value;						
 						
@@ -141,7 +144,7 @@
 				unset($value1[$key]);
 			} else {
 											
-				$valArr = split (",", $value);
+				$valArr = explode (",", $value);
 				$sql = "INSERT INTO indexer (collection, words, frequency, documents) VALUES ('".$oldcollectionId."', '".$key."', '".$valArr[0]."', '".$valArr[1]."');";
 				
 				if ($conn->query($sql) !== TRUE) {

@@ -1,7 +1,7 @@
 
 <?php
 
-function cori($query){
+function cori2($queryId, $query){
 	
 	$servername = "localhost";
 	$username = "root";
@@ -20,7 +20,7 @@ function cori($query){
 	$sCollections = array();
 	$avgBeliefs = array();
 	
-	echo '<h2>All beliefs:</h2>';
+	//echo '<h2>All beliefs:</h2>';
 	
 	foreach ($words as $t){
 		
@@ -88,7 +88,7 @@ function cori($query){
 				$beliefs[$cName] = $P;
 			}
 			
-			print_r($beliefs);
+			//print_r($beliefs);
 			
 			foreach ($beliefs as $collec => $belief){
 				if(isset($avgBeliefs[$collec])){
@@ -120,22 +120,54 @@ function cori($query){
 			$sCollections[$t] = $bestColls; // array of selected collections for each words
 		}
 	}
-	echo '<br /><br /><h2>Chosen 5 collections for each word:</h2>';
+	//echo '<br /><br /><h2>Chosen 5 collections for each word:</h2>';
 	
 	
-	print_r($sCollections);
+	//print_r($sCollections);
 	
 	foreach ($avgBeliefs as $collec => $belief){
 		
 			$avgBeliefs[$collec] = $avgBeliefs[$collec] / count($words);
 	}
 	
-	echo '<br /><br /><h2>Average beliefs:</h2>';
+	//echo '<br /><br /><h2>Average beliefs:</h2>';
 	
-	print_r($avgBeliefs);
+	//print_r($avgBeliefs);
+	
+	$file = fopen('baseline.txt', 'a');
+	$i = 0;
+	foreach ($avgBeliefs as $cName => $avgBfs)
+	{
+		$newRow = $queryId.' Q0 FW13-'.$cName.' '.$i.' '.$avgBfs.' baseline';
+	
+		fwrite($file, $newRow . "\n");
+		
+		$i++;
+	}
+	
+	fclose($file);
 	
 	$conn->close();
 	
 }
+
+
+function baseline(){
+	
+	$handle = @fopen("fedweb13.queries.txt", "r");
+	if ($handle) {
+		while (($buffer = fgets($handle, 4096)) !== false) {
+				
+			$myQuery = substr($buffer, 5, strlen(trim($buffer)) - 5);
+			$myQueryId = substr($buffer, 0, 4);
+			cori2($myQueryId, $myQuery);
+		}
+		if (!feof($handle)) {
+			echo "Error: unexpected fgets() fail\n";
+		}
+		fclose($handle);
+	}
+}
+
 
 ?>
